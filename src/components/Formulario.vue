@@ -5,26 +5,12 @@
                 <input 
                     type="text" 
                     class="input" 
-                    placeholder="Qual tarefa você deseja iniciar?">
+                    placeholder="Qual tarefa você deseja iniciar?"
+                    v-model="descricao"    
+                >
             </div>
             <div class="column">
-                <div class="is-flex is-align-items-center is-justify-content-space-between">
-                    <section>
-                        <strong>{{ tempoDecorrid }}</strong>
-                    </section>
-                    <button class="button" @click="iniciar">
-                        <span class="icon">
-                            <i class="fas fa-play"></i>
-                        </span>
-                        <span>play</span>
-                    </button>
-                    <button class="button" @click="finalizar">
-                        <span class="icon">
-                            <i class="fas fa-stop"></i>
-                        </span>
-                        <span>stop</span>
-                    </button>
-                </div>
+                <Temporizador @aoTemporizadorFinalizado="finalizarTarefa"/>
             </div>
         </div>
     </div>
@@ -32,30 +18,26 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import Temporizador from './Temporizador.vue';
 
 export default defineComponent({
     name: "FormularioComponent",
-    data() {
-        return {
-            tempoEmSegundos: 0,
-            cronometro: 0
-        }
+    emits: ['aoSalvarTarefa'],
+    components: {
+        Temporizador
     },
-    computed: {
-        tempoDecorrid () : string {
-            return new Date(this.tempoEmSegundos * 1000).toISOString().substring(11, 19)
+    data () {
+        return {
+            descricao: ''
         }
     },
     methods: {
-        iniciar () {
-            // Começar a contagem
-            this.cronometro = setInterval(() => {
-                this.tempoEmSegundos++;
-            }, 1000)
-        },
-        finalizar () {
-            clearInterval(this.cronometro)
-            console.log('Finalizando')
+        finalizarTarefa (tempoDecorrido: number): void {
+            this.$emit('aoSalvarTarefa', {
+                duracaoEmSegundos: tempoDecorrido,
+                descricao: this.descricao
+            }),
+            this.descricao = ''
         }
     }
 })

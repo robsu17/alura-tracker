@@ -12,7 +12,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .box {
   background-color: #FAF0CA;
 }

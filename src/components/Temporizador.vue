@@ -42,11 +42,8 @@ export default defineComponent({
             this.cronometroRodando = true;
         },
         finalizar () {
-            this.$emit('aoTemporizadorFinalizado', {
-                tempoDecorrido: this.cronometro
-            })
             clearInterval(this.cronometro)
-            console.log('Finalizando')
+            this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos)
             this.cronometroRodando = false;
         }
     },
